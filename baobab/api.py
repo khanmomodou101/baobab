@@ -53,10 +53,11 @@ def get_item_stock_entry_details():
 
 
 @frappe.whitelist()
-def delete_disabled_items():
+def delete_item_groups():
+    # delete all item groups expect for the item group "Rooms"
     frappe.db.sql("""
-        DELETE FROM `tabItem`
-        WHERE `disabled` = 1
+        DELETE FROM `tabItem Group`
+        WHERE `name` != 'Rooms'
     """)
     frappe.db.commit()
     return "Success"
