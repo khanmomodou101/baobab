@@ -50,3 +50,14 @@ def get_item_stock_entry_details():
             data[item.item_code]["supplied_value"] += flt(item.qty) * flt(item.valuation_rate)
             
     return data.values()
+
+
+@frappe.whitelist()
+def delete_disabled_items():
+    frappe.db.sql("""
+        DELETE FROM `tabItem`
+        WHERE `disabled` = 1
+    """)
+    frappe.db.commit()
+    return "Success"
+    
