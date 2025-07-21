@@ -139,7 +139,7 @@ app_license = "mit"
 
 doc_events = {
 	"Sales Invoice": {
-		"validate": "baobab.api.remove_duplicate_sales_invoice"
+		"validate": "baobab.api.remove_duplicate_payments"
 	}
 }
 

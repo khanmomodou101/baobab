@@ -67,8 +67,9 @@ def update_maintenan_stock(item_group):
         frappe.db.commit()
 
 @frappe.whitelist()
-def remove_duplicate_sales_invoice(doc, method=None):
+def remove_duplicate_payments(doc, method=None):
     try:
+        frappe.log_error(f"Removing duplicate payments from sales invoice {doc.name}")
         payment_methods = set()
         unique_payments = []
         
@@ -78,8 +79,7 @@ def remove_duplicate_sales_invoice(doc, method=None):
                 unique_payments.append(payment)
         
         doc.payments = unique_payments
-        doc.save()
-        frappe.db.commit()
+        frappe.log_error(f"Removed duplicate payments from sales invoice {unique_payments}")
         
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Error removing duplicate payments from sales invoice")
