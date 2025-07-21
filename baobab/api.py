@@ -66,6 +66,7 @@ def update_maintenan_stock(item_group):
 @frappe.whitelist()
 def remove_duplicate_sales_invoice(inv, method=None):
     try:
+        frappe.log_error(f"Removing duplicate payments from sales invoice {inv}")
         doc = frappe.get_doc("Sales Invoice", inv)
         payment_methods = set()
         unique_payments = []
