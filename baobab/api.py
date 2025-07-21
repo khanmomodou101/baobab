@@ -72,14 +72,19 @@ def remove_duplicate_payments(doc, method=None):
         frappe.log_error(f"Removing duplicate payments from sales invoice {doc.name}")
         payment_methods = set()
         unique_payments = []
-        
+
         for payment in doc.payments:
-            if payment.mode_of_payment not in payment_methods:
-                payment_methods.add(payment.mode_of_payment)
+            mode_of_payment = getattr(payment, "mode_of_payment", None) or payment.get("mode_of_payment")
+            if mode_of_payment and mode_of_payment not in payment_methods:
+                payment_methods.add(mode_of_payment)
                 unique_payments.append(payment)
-        
-        doc.payments = unique_payments
+
+        # Clear and re-add payments
+        doc.set("payments", [])
+        for payment in unique_payments:
+            doc.append("payments", payment)
+
         frappe.log_error(f"Removed duplicate payments from sales invoice {unique_payments}")
-        
+
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Error removing duplicate payments from sales invoice")
