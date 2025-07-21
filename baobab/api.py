@@ -78,6 +78,8 @@ def remove_duplicate_sales_invoice(doc, method=None):
                 unique_payments.append(payment)
         
         doc.payments = unique_payments
+        doc.save()
+        frappe.db.commit()
         
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Error removing duplicate payments from sales invoice")
