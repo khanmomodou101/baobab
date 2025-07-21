@@ -54,7 +54,10 @@ def get_item_stock_entry_details():
 
 @frappe.whitelist()
 def edit_items():
-    items = frappe.
+    items = frappe.get_list("Item", {"item_group": "All"})
+    for item in items:
+        frappe.db.set_value("Item", item.name, "maintenance_schedule", "Maintenance Schedule-00001")
+        frappe.db.commit()
     
 @frappe.whitelist()
 def update_maintenan_stock(item_group):
