@@ -53,12 +53,25 @@ def get_item_stock_entry_details():
 
 
 @frappe.whitelist()
-def delete_item_groups():
-    # delete all item groups expect for the item group "Rooms"
-    frappe.db.sql("""
-        DELETE FROM `tabItem Group`
-        WHERE `name` != 'Rooms'
-    """)
-    frappe.db.commit()
-    return "Success"
+def edit_items():
+    items = frappe.
     
+@frappe.whitelist()
+def update_maintenan_stock(item_group):
+    items = frappe.get_list("Item", {"item_group": item_group})
+    for item in items:
+        frappe.db.set_value("Item", item.name, "maintenance_schedule", "Maintenance Schedule-00001")
+        frappe.db.commit()
+
+@frappe.whitelist()
+def remove_duplicate_sales_invoice(doc, method=None):
+    if doc.payments:
+        payment_methods = set()
+        unique_payments = []
+        
+        for payment in doc.payments:
+            if payment.mode_of_payment not in payment_methods:
+                payment_methods.add(payment.mode_of_payment)
+                unique_payments.append(payment)
+        
+        doc.payments = unique_payments
